@@ -1,5 +1,5 @@
 import { clerkClient } from "@clerk/nextjs";
-import { User } from "@clerk/nextjs/dist/types/server";
+import { User, WebhookEvent } from "@clerk/nextjs/dist/types/server";
 import { eq } from "drizzle-orm";
 import type { IncomingHttpHeaders } from "http";
 import { NextRequest, NextResponse } from "next/server";
@@ -57,13 +57,15 @@ type EventType =
   | "*";
 
 export async function POST(req: NextRequestWithSvixHeaders) {
-  const payload = await req.json();
+  const payload = (await req.json()) as WebhookEvent;
   const headerPayload = req.headers;
   const svixId = headerPayload.get("svix-id");
   const svixIdTimeStamp = headerPayload.get("svix-timestamp");
   const svixSignature = headerPayload.get("svix-signature");
 
-  if (!payload) {
+  console.log({ payload });
+
+  if (!payload.type) {
     console.log("no payload");
     return NextResponse.json({ message: "No payload" }, { status: 400 });
   }
@@ -81,12 +83,10 @@ export async function POST(req: NextRequestWithSvixHeaders) {
     "svix-signature": svixSignature,
   };
 
-  console.log({ payload });
-
   const wh = new Webhook(webhookSecret);
   let evt: Event | null = null;
   try {
-    evt = wh.verify(payload, svixHeaders) as Event;
+    evt = wh.verify(JSON.stringify(payload), svixHeaders) as Event;
 
     console.log("Successfully Verified");
   } catch (_) {
