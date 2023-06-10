@@ -25,5 +25,13 @@ export const UsersTable = pgTable(
   }
 );
 
+export const PostsTable = pgTable("posts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  userId: serial("userId").notNull(),
+});
+
 export type User = InferModel<typeof UsersTable>;
 export type NewUser = InferModel<typeof UsersTable, "insert">;
