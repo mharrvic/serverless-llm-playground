@@ -15,6 +15,13 @@
       "when": 1686410429694,
       "tag": "0001_melodic_dreaming_celestial",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1686411700922,
+      "tag": "0002_slippery_harpoon",
+      "breakpoints": true
     }
   ]
 }
