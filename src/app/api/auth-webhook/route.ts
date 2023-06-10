@@ -64,7 +64,7 @@ export async function POST(req: NextRequestWithSvixHeaders) {
   const svixSignature = headerPayload.get("svix-signature");
 
   console.log({ svixId, svixIdTimeStamp, svixSignature });
-  console.log({ headerPayload });
+  console.log({ headerPayload, payload });
 
   if (!svixId || !svixIdTimeStamp || !svixSignature) {
     console.log("svixId", svixId);
