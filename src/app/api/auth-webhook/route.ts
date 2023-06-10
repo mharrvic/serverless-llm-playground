@@ -6,7 +6,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import { Webhook, WebhookRequiredHeaders } from "svix";
 import { db } from "~/lib/db";
-import { NewUser, UsersTable } from "~/lib/db/schema";
+import { AuditLogTable, NewUser, UsersTable } from "~/lib/db/schema";
 
 type UnwantedKeys =
   | "emailAddresses"
@@ -100,22 +100,36 @@ export async function POST(
 
   if (eventType === "session.created") {
     console.log("signed in");
-    await db
-      .update(UsersTable)
-      .set({
-        lastSignedInAt: new Date(),
-      })
-      .where(eq(UsersTable.id, parseInt(userId)));
+
+    await db.transaction(async (tx) => {
+      await tx
+        .update(UsersTable)
+        .set({
+          lastSignedInAt: new Date(),
+        })
+        .where(eq(UsersTable.id, parseInt(userId)));
+      await tx.insert(AuditLogTable).values({
+        userId: parseInt(userId),
+        action: "SESSION_CREATED",
+      });
+    });
   }
 
   if (eventType === "session.ended") {
     console.log("signed out");
-    await db
-      .update(UsersTable)
-      .set({
-        lastSignedOutAt: new Date(),
-      })
-      .where(eq(UsersTable.id, parseInt(userId)));
+
+    await db.transaction(async (tx) => {
+      await tx
+        .update(UsersTable)
+        .set({
+          lastSignedOutAt: new Date(),
+        })
+        .where(eq(UsersTable.id, parseInt(userId)));
+      await tx.insert(AuditLogTable).values({
+        userId: parseInt(userId),
+        action: "SESSION_ENDED",
+      });
+    });
   }
 
   if (eventType === "user.created") {
@@ -155,7 +169,13 @@ export async function POST(
       plan: "FREE",
     } satisfies NewUser;
 
-    await db.insert(UsersTable).values(newUser).returning();
+    await db.transaction(async (tx) => {
+      await tx.insert(UsersTable).values(newUser);
+      await tx.insert(AuditLogTable).values({
+        userId: parseInt(userId),
+        action: "USER_CREATED",
+      });
+    });
 
     console.log(`User ${id} was ${eventType}`);
   }
@@ -175,15 +195,22 @@ export async function POST(
     const emailObject = email_addresses?.find((email) => {
       return email.id === primary_email_address_id;
     });
-    await db
-      .update(UsersTable)
-      .set({
-        email: emailObject?.email_address,
-        firstName: first_name,
-        lastName: last_name,
-        image: image_url,
-      })
-      .where(eq(UsersTable.id, parseInt(id)));
+
+    await db.transaction(async (tx) => {
+      await tx
+        .update(UsersTable)
+        .set({
+          email: emailObject?.email_address,
+          firstName: first_name,
+          lastName: last_name,
+          image: image_url,
+        })
+        .where(eq(UsersTable.id, parseInt(id)));
+      await tx.insert(AuditLogTable).values({
+        userId: parseInt(userId),
+        action: "USER_UPDATED",
+      });
+    });
   }
 
   return NextResponse.json({ message: "success" }, { status: 200 });
