@@ -2,8 +2,7 @@ import { clerkClient } from "@clerk/nextjs";
 import { User } from "@clerk/nextjs/dist/types/server";
 import { eq } from "drizzle-orm";
 import type { IncomingHttpHeaders } from "http";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Webhook, WebhookRequiredHeaders } from "svix";
 import { db } from "~/lib/db";
 import { AuditLogTable, NewUser, UsersTable } from "~/lib/db/schema";
@@ -40,7 +39,7 @@ interface UserInterface extends Omit<User, UnwantedKeys> {
 
 const webhookSecret: string = process.env.WEBHOOK_SECRET || "";
 
-type NextApiRequestWithSvixRequiredHeaders = NextApiRequest & {
+type NextRequestWithSvixHeaders = NextRequest & {
   headers: IncomingHttpHeaders & WebhookRequiredHeaders;
 };
 
@@ -57,10 +56,7 @@ type EventType =
   | "session.ended"
   | "*";
 
-export async function POST(
-  req: NextApiRequestWithSvixRequiredHeaders,
-  res: NextApiResponse
-) {
+export async function POST(req: NextRequestWithSvixHeaders) {
   const payload = JSON.stringify(req.body);
   const headerPayload = req.headers;
   const svixId = headerPayload["svix-id"];

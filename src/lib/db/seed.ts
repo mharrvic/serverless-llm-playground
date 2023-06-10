@@ -6,19 +6,31 @@ import "dotenv/config";
 
 const newUsers: NewUser[] = [
   {
-    name: "Guillermo Rauch",
+    firstName: "Guillermo",
+    lastName: "Rauch",
+    role: "ADMIN",
+    plan: "FREE",
+    verificationType: "PASSWORD",
     email: "rauchg@vercel.com",
     image:
       "https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg",
   },
   {
-    name: "Lee Robinson",
+    firstName: "Lee",
+    lastName: "Robinson",
+    role: "ADMIN",
+    plan: "FREE",
+    verificationType: "PASSWORD",
     email: "lee@vercel.com",
     image:
       "https://pbs.twimg.com/profile_images/1587647097670467584/adWRdqQ6_400x400.jpg",
   },
   {
-    name: "Steven Tey",
+    firstName: "Steven",
+    lastName: "Tey",
+    role: "ADMIN",
+    plan: "FREE",
+    verificationType: "PASSWORD",
     email: "stey@vercel.com",
     image:
       "https://pbs.twimg.com/profile_images/1506792347840888834/dS-r50Je_400x400.jpg",
