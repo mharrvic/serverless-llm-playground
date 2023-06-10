@@ -81,6 +81,8 @@ export async function POST(req: NextRequestWithSvixHeaders) {
     "svix-signature": svixSignature,
   };
 
+  console.log({ payload });
+
   const wh = new Webhook(webhookSecret);
   let evt: Event | null = null;
   try {
