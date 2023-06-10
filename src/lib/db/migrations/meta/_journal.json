@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1686409937956,
-      "tag": "0000_puzzling_silverclaw",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1686410429694,
-      "tag": "0001_melodic_dreaming_celestial",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1686411700922,
-      "tag": "0002_slippery_harpoon",
+      "when": 1686419214936,
+      "tag": "0000_salty_jazinda",
       "breakpoints": true
     }
   ]

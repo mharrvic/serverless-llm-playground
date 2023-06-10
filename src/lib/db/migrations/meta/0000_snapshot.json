@@ -1,11 +1,11 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "890167d0-abe7-45b1-93f3-488ae7d9d6c9",
+  "id": "8b161d14-9e5d-4c57-870d-684b80d7550c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "Users": {
-      "name": "Users",
+    "llm_playground_audit_log": {
+      "name": "llm_playground_audit_log",
       "schema": "",
       "columns": {
         "id": {
@@ -14,11 +14,66 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
+        "userId": {
+          "name": "userId",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "action": {
+          "name": "action",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        }
+      },
+      "indexes": {
+        "unique_idx": {
+          "name": "unique_idx",
+          "columns": [
+            "userId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "llm_playground_users": {
+      "name": "llm_playground_users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "firstName": {
+          "name": "firstName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lastName": {
+          "name": "lastName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "email": {
           "name": "email",
@@ -32,12 +87,51 @@
           "primaryKey": false,
           "notNull": true
         },
+        "verificationType": {
+          "name": "verificationType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "createdAt": {
           "name": "createdAt",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "lastSignedInAt": {
+          "name": "lastSignedInAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lastSignedOutAt": {
+          "name": "lastSignedOutAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'MEMBER'"
+        },
+        "plan": {
+          "name": "plan",
+          "type": "plan",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'FREE'"
         }
       },
       "indexes": {
@@ -53,7 +147,22 @@
       "compositePrimaryKeys": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "plan": {
+      "name": "plan",
+      "values": {
+        "FREE": "FREE",
+        "PAID": "PAID"
+      }
+    },
+    "role": {
+      "name": "role",
+      "values": {
+        "MEMBER": "MEMBER",
+        "ADMIN": "ADMIN"
+      }
+    }
+  },
   "schemas": {},
   "_meta": {
     "schemas": {},
