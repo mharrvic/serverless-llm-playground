@@ -1,0 +1,1 @@
+ALTER TABLE "Users" RENAME TO "llm_playground_users";
