@@ -59,11 +59,9 @@ type EventType =
 export async function POST(req: NextRequestWithSvixHeaders) {
   const payload = JSON.stringify(req.body);
   const headerPayload = req.headers;
-  const svixId = headerPayload["svix-id"];
-  const svixIdTimeStamp = headerPayload["svix-timestamp"];
-  const svixSignature = headerPayload["svix-signature"];
-
-  console.log({ svixId, svixIdTimeStamp, svixSignature });
+  const svixId = headerPayload.get("svix-id");
+  const svixIdTimeStamp = headerPayload.get("svix-timestamp");
+  const svixSignature = headerPayload.get("svix-signature");
 
   if (!svixId || !svixIdTimeStamp || !svixSignature) {
     console.log("svixId", svixId);
