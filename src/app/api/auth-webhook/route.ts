@@ -63,6 +63,8 @@ export async function POST(req: NextRequestWithSvixHeaders) {
   const svixIdTimeStamp = headerPayload["svix-timestamp"];
   const svixSignature = headerPayload["svix-signature"];
 
+  console.log({ headerPayload });
+
   if (!svixId || !svixIdTimeStamp || !svixSignature) {
     console.log("svixId", svixId);
     console.log("svixIdTimeStamp", svixIdTimeStamp);
@@ -208,6 +210,4 @@ export async function POST(req: NextRequestWithSvixHeaders) {
       });
     });
   }
-
-  return NextResponse.json({ message: "success" }, { status: 200 });
 }
