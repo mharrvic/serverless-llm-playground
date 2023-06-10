@@ -57,15 +57,16 @@ type EventType =
   | "*";
 
 export async function POST(req: NextRequestWithSvixHeaders) {
-  const payload = JSON.stringify(req.body);
+  const payload = await req.json();
   const headerPayload = req.headers;
   const svixId = headerPayload.get("svix-id");
   const svixIdTimeStamp = headerPayload.get("svix-timestamp");
   const svixSignature = headerPayload.get("svix-signature");
 
-  console.log({ svixId, svixIdTimeStamp, svixSignature });
-  console.log({ headerPayload, payload });
-
+  if (!payload) {
+    console.log("no payload");
+    return NextResponse.json({ message: "No payload" }, { status: 400 });
+  }
   if (!svixId || !svixIdTimeStamp || !svixSignature) {
     console.log("svixId", svixId);
     console.log("svixIdTimeStamp", svixIdTimeStamp);
