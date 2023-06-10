@@ -87,6 +87,7 @@ export async function POST(req: NextRequestWithSvixHeaders) {
 
     console.log("Successfully Verified");
   } catch (_) {
+    console.log("Failed to verify");
     return NextResponse.json({ message: "Invalid signature" }, { status: 400 });
   }
 
@@ -147,6 +148,7 @@ export async function POST(req: NextRequestWithSvixHeaders) {
       return email.id === primary_email_address_id;
     });
     if (!emailObject) {
+      console.log("emailObject: ", emailObject);
       return NextResponse.json({ message: "No email object" }, { status: 400 });
     }
 
