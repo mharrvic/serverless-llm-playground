@@ -1,4 +1,4 @@
-Serverless LLM Playground [WIP]
+Serverless LLM Playground (Vercel AI Playground Inspired) [WIP]
 
 ## Vercel Postgres with Drizzle ORM
 
