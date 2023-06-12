@@ -1,7 +1,7 @@
 import { Send, Sparkles } from "lucide-react";
 import { Button } from "~/components/ui/button";
 
-export default function Home() {
+export default function Playground() {
   return (
     <>
       <div className="flex-1 flex lg:justify-between h-screen">
