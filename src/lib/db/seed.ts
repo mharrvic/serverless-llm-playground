@@ -6,6 +6,7 @@ import "dotenv/config";
 
 const newUsers: NewUser[] = [
   {
+    id: "123",
     firstName: "Guillermo",
     lastName: "Rauch",
     role: "ADMIN",
@@ -16,6 +17,7 @@ const newUsers: NewUser[] = [
       "https://pbs.twimg.com/profile_images/1576257734810312704/ucxb4lHy_400x400.jpg",
   },
   {
+    id: "1234",
     firstName: "Lee",
     lastName: "Robinson",
     role: "ADMIN",
@@ -26,6 +28,7 @@ const newUsers: NewUser[] = [
       "https://pbs.twimg.com/profile_images/1587647097670467584/adWRdqQ6_400x400.jpg",
   },
   {
+    id: "12345",
     firstName: "Steven",
     lastName: "Tey",
     role: "ADMIN",
