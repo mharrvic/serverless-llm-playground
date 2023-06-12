@@ -41,12 +41,6 @@ export default function RootLayout({
               </Link>
 
               <div className="lg:flex lg:gap-x-12">
-                <Link
-                  href="/playground"
-                  className="text-sm font-semibold leading-6 text-gray-900"
-                >
-                  Playground
-                </Link>
                 <UserButton afterSignOutUrl="/" />
               </div>
             </nav>
