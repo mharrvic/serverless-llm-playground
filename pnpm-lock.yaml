@@ -4,6 +4,9 @@ dependencies:
   '@clerk/nextjs':
     specifier: ^4.20.0
     version: 4.20.0(next@13.4.4)(react-dom@18.2.0)(react@18.2.0)
+  '@radix-ui/react-slot':
+    specifier: ^1.0.2
+    version: 1.0.2(@types/react@18.2.10)(react@18.2.0)
   '@types/node':
     specifier: 20.2.6
     version: 20.2.6
@@ -431,6 +434,35 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       tslib: 2.5.3
+    dev: false
+
+  /@radix-ui/react-compose-refs@1.0.1(@types/react@18.2.10)(react@18.2.0):
+    resolution: {integrity: sha512-fDSBgd44FKHa1FRMU59qBMPFcl2PZE+2nmqunj+BWFyYYjnhIDWL2ItDs3rrbJDQOtzt5nIebLCQc4QRfz6LJw==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.5
+      '@types/react': 18.2.10
+      react: 18.2.0
+    dev: false
+
+  /@radix-ui/react-slot@1.0.2(@types/react@18.2.10)(react@18.2.0):
+    resolution: {integrity: sha512-YeTpuq4deV+6DusvVUW4ivBgnkHwECUu0BiN43L5UCDFgdhsRUWAghhTF5MbvNTPzmiFOx90asDSUjWuCNapwg==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.22.5
+      '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.10)(react@18.2.0)
+      '@types/react': 18.2.10
+      react: 18.2.0
     dev: false
 
   /@rushstack/eslint-patch@1.3.1:
