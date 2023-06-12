@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "8b161d14-9e5d-4c57-870d-684b80d7550c",
+  "id": "0cff4b8b-d4b7-40a0-83c2-b2ca90bc689c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "llm_playground_audit_log": {
@@ -10,13 +10,14 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "userId": {
           "name": "userId",
-          "type": "serial",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -41,15 +42,7 @@
           "notNull": true
         }
       },
-      "indexes": {
-        "unique_idx": {
-          "name": "unique_idx",
-          "columns": [
-            "userId"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {}
     },
@@ -59,7 +52,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "text",
           "primaryKey": true,
           "notNull": true
         },
@@ -85,7 +78,7 @@
           "name": "image",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "verificationType": {
           "name": "verificationType",
