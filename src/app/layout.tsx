@@ -1,5 +1,7 @@
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, UserButton } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
+import Image from "next/image";
+import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,7 +19,37 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <header className="bg-white">
+            <nav
+              className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+              aria-label="Global"
+            >
+              <span className="sr-only">Serverless LLM Playground</span>
+              <Link href="/">
+                <Image
+                  src="/vercel.svg"
+                  alt="Vercel Logo"
+                  className="dark:invert"
+                  width={100}
+                  height={24}
+                  priority
+                />
+              </Link>
+
+              <div className="lg:flex lg:gap-x-12">
+                <Link
+                  href="/playground"
+                  className="text-sm font-semibold leading-6 text-gray-900"
+                >
+                  Playground
+                </Link>
+                <UserButton afterSignOutUrl="/" />
+              </div>
+            </nav>
+          </header>
+          <main>{children}</main>
+        </body>
       </html>
     </ClerkProvider>
   );
