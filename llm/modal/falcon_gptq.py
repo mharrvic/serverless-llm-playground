@@ -125,7 +125,7 @@ class Falcon40BGPTQ:
 # sequentially for a list of inputs. You can run this locally with `modal run -q falcon_gptq.py`. The `-q` flag
 # enables streaming to work in the terminal output.
 prompt_template = (
-    "A chat between a curious human user and an artificial intelligence assistant. The assistant give a helpful, detailed, and accurate answer to the user's question."
+    "A chat between a curious human user and an artificial intelligence assistant. The assistant give a helpful, detailed, and accurate answer to the user's question. Return your answer in markdown format."
     "\n\nUser:\n{}\n\nAssistant:\n"
 )
 

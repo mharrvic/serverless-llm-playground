@@ -2,6 +2,8 @@
 
 import { Loader2, Send, Sparkles } from "lucide-react";
 import React from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Button } from "~/components/ui/common/button";
 import LLMSettingsButton from "~/components/ui/llm-settings-btn";
 import { models } from "~/model-config";
@@ -28,51 +30,47 @@ export default function Generate() {
     setResponses(initModelState);
     setLoading(true);
 
-    const responses = await Promise.all(
-      models.map(async (llm) => {
-        return await fetch(llm.endpoint, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_MODAL_KEY}`,
-          },
-          body: JSON.stringify({
-            prompt: input,
-          }),
-        });
+    const requests = models.map((llm) =>
+      fetch(llm.endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_MODAL_KEY}`,
+        },
+        body: JSON.stringify({
+          prompt: input,
+        }),
+      }).then(async (response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+
+        const data = response.body;
+        if (!data) {
+          return;
+        }
+
+        const reader = data.getReader();
+        const decoder = new TextDecoder();
+        let done = false;
+
+        while (!done) {
+          const { value, done: doneReading } = await reader.read();
+          done = doneReading;
+          const chunkValue = decoder.decode(value);
+          setLoading(true);
+          setResponses((prev) => ({
+            ...prev,
+            [response.url]: prev[response.url]
+              ? prev[response.url] + chunkValue
+              : chunkValue,
+          }));
+        }
       })
     );
 
-    responses.map(async (response) => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-
-      // This data is a ReadableStream
-      const data = response.body;
-      if (!data) {
-        return;
-      }
-
-      const reader = data.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        const chunkValue = decoder.decode(value);
-        setLoading(true);
-        setResponses((prev) => ({
-          ...prev,
-          [response.url]: prev[response.url] + chunkValue,
-        }));
-      }
-
-      if (done) {
-        setLoading(false);
-      }
-    });
+    await Promise.all(requests);
+    setLoading(false);
   };
 
   return (
@@ -92,11 +90,11 @@ export default function Generate() {
             </div>
           </div>
           <div className="md:divide-x md:divide-y-0 divide-y border-t bg-zinc-50 flex flex-col md:flex-row h-full w-full overflow-y-hidden">
-            {models.map((model) => {
+            {models.map((model, index) => {
               return (
                 <div
                   className="flex md:min-w-[465px] md:flex-1 md:flex-grow w-full"
-                  key={model.endpoint}
+                  key={index}
                 >
                   <div className="py-6 px-4 lg:px-6 flex-grow w-full">
                     <div className="flex items-center justify-between pb-0.5">
@@ -109,7 +107,9 @@ export default function Generate() {
                     </div>
                     <div className="w-full text-black bg-zinc-50 min-h-[200px] placeholder-zinc-400 h-full border-none focus:ring-0 focus:border-black pt-2 pb-16 px-0 rounded-lg">
                       <div className="prose prose-pre:bg-[#282c34] flex-1 prose-sm max-w-none w-full">
-                        {responses[model.endpoint]}
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {responses[model.endpoint]}
+                        </ReactMarkdown>
                       </div>
                     </div>
                   </div>
