@@ -2,10 +2,10 @@ import { InferModel } from "drizzle-orm";
 import {
   pgEnum,
   pgTableCreator,
-  serial,
   text,
   timestamp,
   uniqueIndex,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 const pgTable = pgTableCreator((name) => `llm_playground_${name}`);
@@ -16,11 +16,11 @@ export const userPlanEnum = pgEnum("plan", ["FREE", "PAID"]);
 export const UsersTable = pgTable(
   "users",
   {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     firstName: text("firstName"),
     lastName: text("lastName"),
     email: text("email").notNull(),
-    image: text("image").notNull(),
+    image: text("image"),
     verificationType: text("verificationType").notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().notNull(),
@@ -36,21 +36,13 @@ export const UsersTable = pgTable(
   }
 );
 
-export const AuditLogTable = pgTable(
-  "audit_log",
-  {
-    id: serial("id").primaryKey(),
-    userId: serial("userId").notNull(),
-    createdAt: timestamp("createdAt").defaultNow().notNull(),
-    updatedAt: timestamp("updatedAt").defaultNow().notNull(),
-    action: text("action").notNull(),
-  },
-  (audit_log) => {
-    return {
-      uniqueIdx: uniqueIndex("unique_idx").on(audit_log.userId),
-    };
-  }
-);
+export const AuditLogTable = pgTable("audit_log", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("userId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+  action: text("action").notNull(),
+});
 
 export type User = InferModel<typeof UsersTable>;
 export type NewUser = InferModel<typeof UsersTable, "insert">;
