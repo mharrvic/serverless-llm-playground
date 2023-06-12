@@ -57,3 +57,11 @@ npm run migrations:drop
 ```bash
 npm run dev
 ```
+
+TODO:
+
+- [ ] Dynamic model selection
+- [ ] Update LLM settings via UI
+- [ ] Add settings page
+- [ ] Add token count usage
+- [ ] Add support for other models from HuggingFace, OpenAI, Anthropic, Cohere, and Replicate
