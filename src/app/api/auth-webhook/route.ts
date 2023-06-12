@@ -188,4 +188,6 @@ export async function POST(req: NextRequestWithSvixHeaders) {
       { status: 200 }
     );
   }
+
+  return NextResponse.json({ message: "Success" }, { status: 200 });
 }
