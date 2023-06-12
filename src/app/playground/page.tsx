@@ -1,5 +1,5 @@
 import { Send, Sparkles } from "lucide-react";
-import { Button } from "~/components/ui/button";
+import { Button } from "~/components/ui/common/button";
 
 export default function Playground() {
   return (
