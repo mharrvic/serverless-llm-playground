@@ -14,6 +14,7 @@ Modal setup
    - https://modal.com/docs/guide/ex/openllama
    - https://modal.com/docs/guide/ex/falcon_bitsandbytes#serve-the-model
    - https://modal.com/docs/guide/ex/falcon_gptq
+     Make sure to add secrets on `llm-playground-secrets` collection with `AUTH_TOKEN` value for `web_endpoint` authentication layer.
 
 2. Copy the Modal URL and add it to the model config under `src/model-config.ts`
 
@@ -65,3 +66,7 @@ TODO:
 - [ ] Add settings page
 - [ ] Add token count usage
 - [ ] Add support for other models from HuggingFace, OpenAI, Anthropic, Cohere, and Replicate
+
+FAQ:
+q: Why not use Next.js API routes instead for additional protection with Clerk and Modal endpoint?
+a: Because llm generation with modal might take a while like 20-30 seconds and it will timeout the request (also this https://vercel.com/docs/concepts/limits/overview#general-limits)
