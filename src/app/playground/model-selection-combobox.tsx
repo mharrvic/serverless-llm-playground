@@ -3,47 +3,42 @@
 import { Check, ChevronsUpDown } from "lucide-react";
 import * as React from "react";
 
-import { Button } from "~/components/ui/button";
+import { Button } from "~/components/ui/common/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "~/components/ui/command";
+} from "~/components/ui/common/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "~/components/ui/popover";
+} from "~/components/ui/common/popover";
 import { cn } from "~/lib/utils";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
-
-export function ModelSelection() {
+export function ModelSelection({
+  models,
+  defaultValue,
+  disabled = false,
+}: {
+  models: {
+    endpoint: string;
+    name: string;
+  }[];
+  defaultValue: string;
+  disabled?: boolean;
+}) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+
+  const modelList = models.map((model) => {
+    return {
+      value: model.name,
+      label: model.name,
+    };
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -51,21 +46,22 @@ export function ModelSelection() {
         <Button
           variant="outline"
           role="combobox"
+          disabled={disabled}
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[300px] justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+            ? modelList.find((framework) => framework.value === value)?.label
+            : defaultValue}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[300px] p-0">
         <Command>
           <CommandInput placeholder="Search framework..." />
           <CommandEmpty>No framework found.</CommandEmpty>
           <CommandGroup>
-            {frameworks.map((framework) => (
+            {modelList.map((framework) => (
               <CommandItem
                 key={framework.value}
                 onSelect={(currentValue) => {
