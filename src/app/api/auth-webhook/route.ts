@@ -58,12 +58,11 @@ type EventType =
 
 export async function POST(req: NextRequestWithSvixHeaders) {
   const payload = (await req.json()) as WebhookEvent;
+
   const headerPayload = req.headers;
   const svixId = headerPayload.get("svix-id");
   const svixIdTimeStamp = headerPayload.get("svix-timestamp");
   const svixSignature = headerPayload.get("svix-signature");
-
-  console.log({ payload });
 
   if (!payload.type) {
     console.log("no payload");
@@ -94,12 +93,9 @@ export async function POST(req: NextRequestWithSvixHeaders) {
     return NextResponse.json({ message: "Invalid signature" }, { status: 400 });
   }
 
-  // Handle the webhook
   const eventType: EventType = evt.type;
 
-  const userId = evt.data.user_id;
-
-  console.log("hey im event: ", evt.data);
+  const userId = evt.data.id;
 
   if (eventType === "session.created") {
     console.log("signed in");
@@ -110,12 +106,14 @@ export async function POST(req: NextRequestWithSvixHeaders) {
         .set({
           lastSignedInAt: new Date(),
         })
-        .where(eq(UsersTable.id, parseInt(userId)));
+        .where(eq(UsersTable.id, userId));
       await tx.insert(AuditLogTable).values({
-        userId: parseInt(userId),
+        userId: userId,
         action: "SESSION_CREATED",
       });
     });
+
+    return NextResponse.json({ message: "User signed in" }, { status: 200 });
   }
 
   if (eventType === "session.ended") {
@@ -127,12 +125,14 @@ export async function POST(req: NextRequestWithSvixHeaders) {
         .set({
           lastSignedOutAt: new Date(),
         })
-        .where(eq(UsersTable.id, parseInt(userId)));
+        .where(eq(UsersTable.id, userId));
       await tx.insert(AuditLogTable).values({
-        userId: parseInt(userId),
+        userId: userId,
         action: "SESSION_ENDED",
       });
     });
+
+    return NextResponse.json({ message: "User signed out" }, { status: 200 });
   }
 
   if (eventType === "user.created") {
@@ -163,57 +163,29 @@ export async function POST(req: NextRequestWithSvixHeaders) {
     });
 
     const newUser = {
-      id: parseInt(id),
+      id: id,
       email: emailObject.email_address,
       image: image_url,
       firstName: first_name,
       lastName: last_name,
-      verificationType: emailObject.verification.strategy,
+      verificationType: emailObject.verification?.strategy ?? "email",
       role: "MEMBER",
       plan: "FREE",
     } satisfies NewUser;
 
+    console.log({ newUser });
     await db.transaction(async (tx) => {
       await tx.insert(UsersTable).values(newUser);
       await tx.insert(AuditLogTable).values({
-        userId: parseInt(userId),
+        userId: userId,
         action: "USER_CREATED",
       });
     });
 
     console.log(`User ${id} was ${eventType}`);
-  }
-
-  if (eventType === "user.updated") {
-    console.log("updated user");
-
-    const {
-      email_addresses,
-      primary_email_address_id,
-      first_name,
-      last_name,
-      image_url,
-      id,
-    } = evt.data;
-
-    const emailObject = email_addresses?.find((email) => {
-      return email.id === primary_email_address_id;
-    });
-
-    await db.transaction(async (tx) => {
-      await tx
-        .update(UsersTable)
-        .set({
-          email: emailObject?.email_address,
-          firstName: first_name,
-          lastName: last_name,
-          image: image_url,
-        })
-        .where(eq(UsersTable.id, parseInt(id)));
-      await tx.insert(AuditLogTable).values({
-        userId: parseInt(userId),
-        action: "USER_UPDATED",
-      });
-    });
+    return NextResponse.json(
+      { message: `User ${id} created` },
+      { status: 200 }
+    );
   }
 }
