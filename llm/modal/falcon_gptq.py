@@ -1,6 +1,5 @@
-# ---
-# integration-test: false
-# ---
+# Source: https://modal.com/docs/examples/falcon_gptq
+
 # # Run Falcon-40B with AutoGPTQ
 
 # In this example, we run a quantized 4-bit version of Falcon-40B, the first open-source large language
@@ -124,25 +123,19 @@ class Falcon40BGPTQ:
 # We define a [`local_entrypoint`](/docs/guide/apps#entrypoints-for-ephemeral-apps) to call our remote function
 # sequentially for a list of inputs. You can run this locally with `modal run -q falcon_gptq.py`. The `-q` flag
 # enables streaming to work in the terminal output.
-prompt_template = (
-    "A chat between a curious human user and an artificial intelligence assistant. The assistant give a helpful, detailed, and accurate answer to the user's question. Return your answer in markdown format."
-    "\n\nUser:\n{}\n\nAssistant:\n"
-)
-
-
 @stub.local_entrypoint()
 def cli():
     question = "What is the meaning of life"
+    prompt_template = (
+        "A chat between a curious human user and an artificial intelligence assistant. The assistant give a helpful, detailed, and accurate answer to the user's question. Return your answer in markdown format."
+        "\n\nUser:\n{}\n\nAssistant:\n"
+    )
     model = Falcon40BGPTQ()
     for text in model.generate.call(prompt_template.format(question)):
         print(text, end="", flush=True)
 
 
-# ## Serve the model
-# Finally, we can serve the model from a web endpoint with `modal deploy falcon_gptq.py`. If
-# you visit the resulting URL with a question parameter in your URL, you can view the model's
-# stream back a response.
-# You can try our deployment [here](https://modal-labs--example-falcon-gptq-get.modal.run/?question=Why%20are%20manhole%20covers%20round?).
+# ## Serve the model with FastAPI StreamingResponse
 @stub.function(timeout=600, secret=Secret.from_name("llm-playground-secrets"))
 @web_endpoint(method="POST")
 def generate(

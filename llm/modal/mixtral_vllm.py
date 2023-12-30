@@ -1,3 +1,5 @@
+# Source: https://modal.com/docs/examples/vllm_mixtral
+
 # # Fast inference with vLLM (Mixtral 8x7B)
 #
 # In this example, we show how to run basic inference, using [`vLLM`](https://github.com/vllm-project/vllm)
@@ -184,9 +186,8 @@ from modal import web_endpoint
 
 
 @stub.function(
-    keep_warm=3,
-    allow_concurrent_inputs=20,
-    container_idle_timeout=60 * 5,
+    keep_warm=1,
+    allow_concurrent_inputs=10,
     timeout=60 * 10,
 )
 @web_endpoint(method="POST")
