@@ -89,15 +89,18 @@ export default function Generate() {
                 placeholder="how to be good at anything in 3 words"
                 value={input}
               />
-              <Button
-                variant="ghost"
-                className="w-[200px] text-gray-500"
-                onClick={() => {
-                  setInput("How to be good at anything in 3 words");
-                }}
-              >
-                <p>Copy example</p>
-              </Button>
+
+              {input.length === 0 && (
+                <Button
+                  variant="outline"
+                  className="w-96 text-gray-500"
+                  onClick={() => {
+                    setInput("How to be good at anything in 3 words");
+                  }}
+                >
+                  <p>example: how to be good at anything in 3 words</p>
+                </Button>
+              )}
             </div>
           </div>
           <div className="md:divide-x md:divide-y-0 divide-y border-t bg-zinc-50 flex flex-col md:flex-row h-full w-full overflow-y-hidden">
