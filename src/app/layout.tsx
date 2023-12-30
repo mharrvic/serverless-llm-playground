@@ -1,6 +1,5 @@
 import { ClerkProvider, UserButton } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
-import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 
@@ -22,22 +21,15 @@ export default function RootLayout({
         <body className={inter.className}>
           <header className="bg-white">
             <nav
-              className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+              className="mx-auto flex items-center justify-between py-6 px-4"
               aria-label="Global"
             >
               <span className="sr-only">Serverless LLM Playground</span>
               <Link href="/" className="flex items-center">
-                <Image
-                  src="/browny-blackie.jpg"
-                  alt="Brownie and Blackie"
-                  className="dark:invert rounded-full"
-                  width={35}
-                  height={35}
-                  priority
-                />
-                <label className="font-semibold font-mono ml-2">
-                  Serverless LLM Playground
+                <label className="font-semibold font-mono">
+                  Opensource Serverless LLM Playground
                 </label>
+                <p className="text-xs ml-2">(More models to come!)</p>
               </Link>
 
               <div className="lg:flex lg:gap-x-12">
