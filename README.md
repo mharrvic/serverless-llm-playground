@@ -67,6 +67,6 @@ TODO:
 - [ ] Add token count usage
 - [ ] Add support for other models from HuggingFace, OpenAI, Anthropic, Cohere, and Replicate
 
-FAQ:
+FAQ: <br>
 q: Why not use Next.js API routes instead for additional protection with Clerk and Modal endpoint?
 a: Because llm generation with modal might take a while like 20-30 seconds and it will timeout the request (also this https://vercel.com/docs/concepts/limits/overview#general-limits)
