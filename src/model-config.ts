@@ -22,6 +22,11 @@ export const models = [
     link: "https://huggingface.co/mistralai/Mixtral-8x7B-Instruct-v0.1",
   },
   {
+    endpoint: `https://${MODAL_API_NAME}--example-llama2-vllm-inference-completion.modal.run/`,
+    name: "llama-2-13b-chat-hf",
+    link: "https://huggingface.co/meta-llama/Llama-2-13b-chat-hf",
+  },
+  {
     endpoint: `https://${MODAL_API_NAME}--example-falcon-gptq-generate.modal.run/`,
     name: "falcon-40b-instruct",
     link: "https://huggingface.co/TheBloke/falcon-40b-instruct-GPTQ",
