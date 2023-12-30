@@ -11,8 +11,9 @@ import { ModelSelection } from "./model-selection-combobox";
 
 const initModelState: { [key: string]: string } = {};
 
-models.forEach(({ endpoint }) => {
+models.forEach(({ endpoint, link }) => {
   initModelState[endpoint] = "";
+  initModelState[`${endpoint}-link`] = link;
 });
 
 export default function Generate() {
@@ -83,10 +84,20 @@ export default function Generate() {
             </label>
             <div className="relative  min-h-[200px] flex-initial flex flex-col w-full">
               <textarea
-                className="w-full min-h-[200px] placeholder-zinc-400 h-full border-none focus:ring-0 focus:border-black py-2 px-0 rounded-lg focus:outline-none"
+                className="w-full min-h-[100px] placeholder-zinc-300 h-full border-none focus:ring-0 focus:border-black py-2 px-0 rounded-lg focus:outline-none text-zinc-500"
                 onChange={(e) => setInput(e.target.value)}
+                placeholder="how to be good at anything in 3 words"
                 value={input}
               />
+              <Button
+                variant="ghost"
+                className="w-[200px] text-gray-500"
+                onClick={() => {
+                  setInput("How to be good at anything in 3 words");
+                }}
+              >
+                <p>Copy example</p>
+              </Button>
             </div>
           </div>
           <div className="md:divide-x md:divide-y-0 divide-y border-t bg-zinc-50 flex flex-col md:flex-row h-full w-full overflow-y-hidden">
@@ -105,6 +116,13 @@ export default function Generate() {
                       />
                       <LLMSettingsButton />
                     </div>
+                    <a
+                      href={model.link}
+                      target="_blank"
+                      className="text-gray-500 w-auto text-xs pb-0.5 flex underline"
+                    >
+                      About this model
+                    </a>
                     <div className="w-full text-black bg-zinc-50 min-h-[200px] placeholder-zinc-400 h-full border-none focus:ring-0 focus:border-black pt-2 pb-16 px-0 rounded-lg">
                       <div className="prose prose-pre:bg-[#282c34] flex-1 prose-sm max-w-none w-full">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
