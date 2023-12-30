@@ -1,4 +1,8 @@
-Serverless LLM Playground with Modal (Heavy Inspired by Vercel AI Playground and Nat.dev) [WIP]
+Serverless LLM Playground with Modal (Heavily Inspired by Vercel AI Playground and Nat.dev) [WIP]
+
+
+https://github.com/mharrvic/serverless-llm-playground/assets/15852818/dbbc9381-45e0-4f27-b422-5a5a1c5eb612
+
 
 ## 1. Getting Started
 
