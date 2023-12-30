@@ -24,6 +24,11 @@ import os
 import time
 from typing import Dict
 
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+auth_scheme = HTTPBearer()
+
 from modal import Image, Secret, Stub, gpu, method, web_endpoint
 
 MODEL_DIR = "/model"
@@ -191,20 +196,25 @@ def main():
 
 
 @stub.function(
-    keep_warm=3,
-    allow_concurrent_inputs=20,
-    container_idle_timeout=60 * 5,
+    keep_warm=1,
+    allow_concurrent_inputs=10,
     timeout=60 * 10,
+    secret=Secret.from_name("llm-playground-secrets")
 )
 @web_endpoint(method="POST")
-async def completion(payload: Dict[str, str]):
+async def completion(payload: Dict[str, str], token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     from urllib.parse import unquote
 
     from fastapi.responses import StreamingResponse
 
     prompt = payload["prompt"]
 
-    print("Sending new request: ", prompt)
+    if token.credentials != os.environ["AUTH_TOKEN"]:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect bearer token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     async def generate():
         async for text in Model().completion_stream.remote_gen.aio(
@@ -221,7 +231,7 @@ async def completion(payload: Dict[str, str]):
     timeout=60 * 10,
 )
 @web_endpoint()
-async def stats():
+async def stats(token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
     stats = await Model().completion_stream.get_current_stats.aio()
     return {
         "backlog": stats.backlog,
