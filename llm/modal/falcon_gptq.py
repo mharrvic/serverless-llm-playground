@@ -165,8 +165,10 @@ def generate(
     model = Falcon40BGPTQ()
     return StreamingResponse(
         chain(
-            ("Loading model. This usually takes around 20s ...\n\n"),
-            model.generate.call(prompt_template.format(prompt)),
+            (
+                "...\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+            ),
+            model.generate.call(prompt),
         ),
         media_type="text/event-stream",
     )
