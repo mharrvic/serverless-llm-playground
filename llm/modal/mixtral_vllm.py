@@ -30,7 +30,7 @@ auth_scheme = HTTPBearer()
 
 MODEL_DIR = "/model"
 BASE_MODEL = "mistralai/Mixtral-8x7B-Instruct-v0.1"
-GPU_CONFIG = gpu.A100(memory=80, count=2)
+GPU_CONFIG = gpu.A100()
 
 
 # ## Define a container image

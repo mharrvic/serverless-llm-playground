@@ -33,7 +33,7 @@ from modal import Image, Secret, Stub, gpu, method, web_endpoint
 
 MODEL_DIR = "/model"
 BASE_MODEL = "meta-llama/Llama-2-13b-chat-hf"
-GPU_CONFIG = gpu.A100(memory=80, count=2)
+GPU_CONFIG = gpu.A100()
 
 
 # ## Define a container image
